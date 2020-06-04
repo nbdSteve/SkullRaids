@@ -1,0 +1,8 @@
+name: SkullRaids
+version: ${project.version}
+main: gg.steve.mc.skullwars.raids.SkullRaids
+api-version: 1.15.2
+prefix: SkullRaids
+depend: [Factions]
+authors: [stevegoodhill]
+description: Raids plugin for the SkullWars network, developed by nbdSteve.
