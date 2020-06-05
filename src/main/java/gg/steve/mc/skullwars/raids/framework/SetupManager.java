@@ -5,6 +5,7 @@ import gg.steve.mc.skullwars.raids.core.FBase;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
 import gg.steve.mc.skullwars.raids.fcmd.FSetBaseCmd;
 import gg.steve.mc.skullwars.raids.fcmd.FUnsetBaseCmd;
+import gg.steve.mc.skullwars.raids.fevent.ClaimListener;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import gg.steve.mc.skullwars.raids.framework.yml.utils.FileManagerUtil;
 import org.bukkit.event.Listener;
@@ -44,6 +45,7 @@ public class SetupManager {
      */
     public static void registerEvents(JavaPlugin instance) {
         PluginManager pm = instance.getServer().getPluginManager();
+        pm.registerEvents(new ClaimListener(), instance);
     }
 
     public static void registerEvent(JavaPlugin instance, Listener listener) {

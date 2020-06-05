@@ -54,14 +54,7 @@ public class FBaseFile extends PluginFile {
         config.set("base.world", location.getWorld().getName());
         config.set("base.chunk-x", x);
         config.set("base.chunk-z", z);
-        List<String> spawnerChunks = new ArrayList<>();
-        for (int i = x - 1; i <= x + 1; i++) {
-            for (int j = z - 1; j <= z + 1; j++) {
-                if (i == x && j == z) continue;
-                spawnerChunks.add(i + ":" + j);
-            }
-        }
-        config.set("spawner-chunks", spawnerChunks);
+        config.set("spawner-chunks", new ArrayList<>());
         save();
         //Send a nice message
         LogUtil.info("Successfully created a new faction roster file for faction with id: " + fileName + ", defaults have been set.");

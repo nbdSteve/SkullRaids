@@ -1,0 +1,8 @@
+max-spawner-chunks: 64
+
+anti-leach-delay: 300
+
+phase-duration:
+  1: 900
+  2: 900
+  3: 1800

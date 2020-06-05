@@ -24,7 +24,12 @@ public class FBaseManager {
     }
 
     public static void shutdown() {
-        if (fBases != null && !fBases.isEmpty()) fBases.clear();
+        if (fBases != null && !fBases.isEmpty()) {
+            for (FBase fBase : fBases.values()) {
+                fBase.saveToFile();
+            }
+            fBases.clear();
+        }
     }
 
     public static boolean isFBaseSet(Faction faction) {
@@ -32,6 +37,7 @@ public class FBaseManager {
     }
 
     public static boolean isSpawnerChunk(Faction faction, Chunk chunk) {
+        if (!fBases.containsKey(faction)) return false;
         return fBases.get(faction).isSpawnerChunk(chunk);
     }
 
@@ -48,5 +54,10 @@ public class FBaseManager {
         if (!fBases.containsKey(faction)) return false;
         fBases.get(faction).getfBaseData().delete();
         return fBases.remove(faction) != null;
+    }
+
+    public static boolean removeBaseChunk(Faction faction, Chunk chunk) {
+        if (!fBases.containsKey(faction)) return false;
+        return fBases.get(faction).removeBaseChunk(chunk);
     }
 }

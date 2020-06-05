@@ -31,12 +31,17 @@ public class FSetBaseCmd extends FCommand {
             sender.sendMessage("You must be in your own territory to use that command.");
             return;
         }
-        if (FBaseManager.isFBaseSet(faction)) {
-            sender.sendMessage("You already have your faction base set, you can not change it.");
+        if (FBaseManager.isSpawnerChunk(faction, sender.getPlayer().getLocation().getChunk())) {
+            sender.sendMessage("This chunk is already a spawner chunk, you can not change it.");
             return;
         }
-        FBaseManager.createFBase(faction, sender.getPlayer().getLocation());
-        sender.sendMessage("Successfully registered your faction base.");
+        if (!FBaseManager.isFBaseSet(faction)) {
+            FBaseManager.createFBase(faction, sender.getPlayer().getLocation());
+            sender.sendMessage("Successfully registered your faction base.");
+        } else {
+            FBaseManager.getFBase(faction).addSpawnerChunk(sender.getPlayer().getLocation().getChunk());
+            sender.sendMessage("You have successfully added a spawner chunk to your factions claim.");
+        }
         // then register the fbase
     }
 
