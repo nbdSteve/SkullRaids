@@ -16,7 +16,12 @@ public class ClaimListener implements Listener {
         Faction faction = event.getFaction();
         Chunk chunk = event.getLocation().getChunk();
         if (!FBaseManager.isFBaseSet(faction)) return;
-        FBaseManager.removeBaseChunk(faction, chunk);
+        if (FBaseManager.isSpawnerChunk(faction, chunk)) {
+            event.getfPlayer().sendMessage("You can not unclaim a spawner chunk.");
+            event.setCancelled(true);
+        } else {
+            FBaseManager.removeBaseChunk(faction, chunk);
+        }
     }
 
     @EventHandler

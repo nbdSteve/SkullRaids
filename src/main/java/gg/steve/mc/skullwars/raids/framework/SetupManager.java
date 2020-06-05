@@ -8,6 +8,10 @@ import gg.steve.mc.skullwars.raids.fcmd.FUnsetBaseCmd;
 import gg.steve.mc.skullwars.raids.fevent.ClaimListener;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import gg.steve.mc.skullwars.raids.framework.yml.utils.FileManagerUtil;
+import gg.steve.mc.skullwars.raids.listener.SpawnerListener;
+import gg.steve.mc.skullwars.raids.listener.TnTListener;
+import gg.steve.mc.skullwars.raids.raid.FRaid;
+import gg.steve.mc.skullwars.raids.raid.FRaidManager;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,6 +50,8 @@ public class SetupManager {
     public static void registerEvents(JavaPlugin instance) {
         PluginManager pm = instance.getServer().getPluginManager();
         pm.registerEvents(new ClaimListener(), instance);
+        pm.registerEvents(new SpawnerListener(), instance);
+        pm.registerEvents(new TnTListener(), instance);
     }
 
     public static void registerEvent(JavaPlugin instance, Listener listener) {
@@ -54,9 +60,12 @@ public class SetupManager {
 
     public static void loadPluginCache() {
         FBaseManager.loadFactionBases();
+        FRaidManager.loadRaids();
+        TnTListener.initialise();
     }
 
     public static void shutdownPluginCache() {
+        FRaidManager.shutdownRaidCache();
         FBaseManager.shutdown();
     }
 

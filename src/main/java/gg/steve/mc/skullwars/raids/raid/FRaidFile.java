@@ -1,4 +1,4 @@
-package gg.steve.mc.skullwars.raids.core;
+package gg.steve.mc.skullwars.raids.raid;
 
 import com.massivecraft.factions.Faction;
 import gg.steve.mc.skullwars.raids.SkullRaids;
@@ -13,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class FBaseFile extends PluginFile {
+public class FRaidFile extends PluginFile {
     //Store the file name string
     private String fileName;
     //Store the player file
@@ -21,13 +21,13 @@ public class FBaseFile extends PluginFile {
     //Store the yaml config
     private YamlConfiguration config;
 
-    public FBaseFile(Faction faction) {
-        this.load(faction.getId(), SkullRaids.getInstance());
+    public FRaidFile(Faction defending) {
+        this.load(defending.getId(), SkullRaids.getInstance());
     }
 
-    public FBaseFile(Faction faction, Location location) {
-        this.load(faction.getId(), SkullRaids.getInstance());
-        setupFactionFileDefaults(this.config, location);
+    public FRaidFile(Faction defending, Faction raiding) {
+        this.load(defending.getId(), SkullRaids.getInstance());
+        setupFactionFileDefaults(this.config, defending, raiding);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class FBaseFile extends PluginFile {
         //Set instance variable
         this.fileName = fileName;
         //Get the player file
-        file = new File(SkullRaids.getInstance().getDataFolder(), "base-data" + File.separator + fileName + ".yml");
+        file = new File(SkullRaids.getInstance().getDataFolder(), "raid-data" + File.separator + fileName + ".yml");
         //Load the configuration for the file
         config = YamlConfiguration.loadConfiguration(file);
         //If the file doesn't exist then set the defaults
@@ -43,16 +43,15 @@ public class FBaseFile extends PluginFile {
         return this;
     }
 
-    private void setupFactionFileDefaults(YamlConfiguration config, Location location) {
+    private void setupFactionFileDefaults(YamlConfiguration config, Faction defending, Faction attacking) {
         //Set defaults for the information about the players tiers and currency
-        int x = location.getChunk().getX(), z = location.getChunk().getZ();
-        config.set("base.world", location.getWorld().getName());
-        config.set("base.chunk-x", x);
-        config.set("base.chunk-z", z);
-        config.set("spawner-chunks", new ArrayList<>());
+        config.set("faction.defending", defending.getId());
+        config.set("faction.attacking", attacking.getId());
+        config.set("raid.phase", FRaidPhase.PHASE_1.name());
+        config.set("raid.remaining", FRaidPhase.PHASE_1.getDuration());
+        config.set("isGen", false);
+        config.set("isAntiLeach", false);
         save();
-        //Send a nice message
-        LogUtil.info("Successfully created a new faction roster file for faction with id: " + fileName + ", defaults have been set.");
     }
 
     @Override

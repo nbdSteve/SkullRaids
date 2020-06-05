@@ -41,7 +41,7 @@ public enum GeneralMessage {
                 for (int i = 0; i < this.placeholders.size(); i++) {
                     line = line.replace(this.placeholders.get(i), data.get(i));
                 }
-                receiver.sendMessage(ColorUtil.colorize(line));
+                receiver.sendRawMessage(ColorUtil.colorize(line));
             }
         }
     }
@@ -60,14 +60,14 @@ public enum GeneralMessage {
                 for (int i = 0; i < this.placeholders.size(); i++) {
                     line = line.replace(this.placeholders.get(i), data.get(i));
                 }
-                receiver.sendMessage(ColorUtil.colorize(line));
+//                receiver.sendRawMessage(ColorUtil.colorize(line));
             }
         }
     }
 
     public static void doMessage(Player receiver, List<String> lines) {
         for (String line : lines) {
-            receiver.sendMessage(ColorUtil.colorize(line));
+            receiver.sendRawMessage(ColorUtil.colorize(line));
         }
     }
 }

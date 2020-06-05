@@ -22,15 +22,15 @@ public class FUnsetBaseCmd extends FCommand {
         Player player = context.fPlayer.getPlayer();
         Faction faction = Board.getInstance().getFactionAt(new FLocation(player.getLocation()));
         if (faction == null || faction.isWilderness() || faction.isSafeZone() || faction.isWarZone()) {
-            player.sendMessage("You are not standing in a faction claim at the moment.");
+            player.sendRawMessage("You are not standing in a faction claim at the moment.");
             return;
         }
         if (!FBaseManager.isFBaseSet(faction)) {
-            player.sendMessage("That faction does not have an fbase set.");
+            player.sendRawMessage("That faction does not have an fbase set.");
             return;
         }
         FBaseManager.unsetFBase(faction);
-        player.sendMessage("You have successfully removed " + faction.getTag() + "'s base.");
+        player.sendRawMessage("You have successfully removed " + faction.getTag() + "'s base.");
     }
 
     @Override

@@ -38,7 +38,7 @@ public enum DebugMessage {
                 for (int i = 0; i < this.placeholders.size(); i++) {
                     line = line.replace(this.placeholders.get(i), data.get(i));
                 }
-                receiver.sendMessage(ColorUtil.colorize(line));
+                receiver.sendRawMessage(ColorUtil.colorize(line));
             }
         }
     }
@@ -57,7 +57,7 @@ public enum DebugMessage {
                 for (int i = 0; i < this.placeholders.size(); i++) {
                     line = line.replace(this.placeholders.get(i), data.get(i));
                 }
-                receiver.sendMessage(ColorUtil.colorize(line));
+//                receiver.sendRawMessage(ColorUtil.colorize(line));
             }
         }
     }

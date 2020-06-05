@@ -1,7 +1,6 @@
 package gg.steve.mc.skullwars.raids.framework.utils;
 
 import gg.steve.mc.skullwars.raids.framework.yml.PluginFile;
-import gg.steve.mc.skullwars.raids.framework.nbt.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -22,7 +21,6 @@ public class ItemBuilderUtil {
     private List<String> lore = new ArrayList<>();
     private Set<ItemFlag> flags = new HashSet<>();
     private List<String> placeholders = new ArrayList<>();
-    private NBTItem nbtItem;
 
     public static ItemBuilderUtil getBuilderForMaterial(String material, String data) {
         if (material.startsWith("hdb")) {
@@ -107,39 +105,12 @@ public class ItemBuilderUtil {
         }
         item.setItemMeta(itemMeta);
     }
-
-    public void addGuiNBT(boolean unbreakable) {
-        nbtItem = new NBTItem(item);
-        if (unbreakable) {
-            nbtItem.setBoolean("Unbreakable", true);
-        }
-        nbtItem.setBoolean("tools+.gui", true);
-    }
-
-    public void addNBT(PluginFile file) {
-        nbtItem = new NBTItem(item);
-        if (file.get().getBoolean("unbreakable")) {
-            nbtItem.setBoolean("Unbreakable", true);
-        }
-    }
-
     public void setItemMeta(ItemMeta itemMeta) {
         this.itemMeta = itemMeta;
     }
 
     public Material getMaterial() {
         return material;
-    }
-
-    public NBTItem getNbtItem() {
-        return nbtItem;
-    }
-
-    public ItemStack getItem() {
-        if (this.nbtItem != null) {
-            return this.nbtItem.getItem();
-        }
-        return this.item;
     }
 
     public ItemMeta getItemMeta() {
