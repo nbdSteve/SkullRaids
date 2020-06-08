@@ -13,7 +13,57 @@ phase-1-reset:
   text:
     - '&5&lSkullRaids&d| &7TNT exploded in the claim, the raid has been reset to phase 1.'
 
-anit-leach:
+anti-leach:
   action-bar: false
   text:
     - '&5&lSkullRaids&d| &7Anti Leach has activated, you have been sent to spawn.'
+
+anti-leach-wall:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &b{defending} &7is already being raided, you can not enter their land.'
+
+dispeners-in-claims:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7You may only place dispensers in faction land.'
+
+already-being-raided:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &b{defending} &7is already being raided by &b{attacking} &7your shots are ineffective.'
+
+phase-1-attacking:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7You have begun phase 1 of raiding &b{defending}&7.'
+
+phase-1-defending:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &b{attacking} &7has begun phase 1 of raiding you, gen buckets are prohibited.'
+
+phase-2-attacking:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7Phase 2 of raiding &b{defending} &7has begun.'
+
+phase-2-defending:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7Phase 2 of raiding has begun, you may now use gen buckets.'
+
+phase-3-attacking:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7Phase 3 of raiding &b{defending} &7has begun.'
+
+phase-3-defending:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7Phase 3 of raiding has begun.'
+
+gen-bucket-blocked:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7You are not allowed to use gen buckets during phase 1 of a raid.'

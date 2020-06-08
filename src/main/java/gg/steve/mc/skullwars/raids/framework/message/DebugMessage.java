@@ -10,6 +10,22 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum DebugMessage {
+    // plugin
+    UNCLAIM_RAID_ACTIVE("unclaim-raid-active"),
+    DISBAND_RAID_ACTIVE("disband-raid-active"),
+    UNCLAIM_SPAWNER_CHUNK("unclaim-spawner-chunk"),
+    NO_FACTION("no-faction"),
+    NOT_LEADER("not-leader"),
+    NOT_IN_TERRITORY("not-in-territory"),
+    ALREADY_SPAWNER_CHUNK("already-spawner-chunk"),
+    FBASE_REGISTER("fbase-register"),
+    MAX_SPAWNER_CHUNKS("max-spawner-chunks"),
+    NOT_CONNECTED("not-connected"),
+    ADD_SPAWNER_CHUNK("add-spawner-chunk"),
+    NOT_IN_CLAIM("not-in-claim"),
+    NO_FBASE_SET("no-fbase-set"),
+    REMOVED_FBASE("removed-fbase"),
+    // misc
     INVALID_COMMAND("invalid-command"),
     INCORRECT_ARGS("incorrect-args"),
     INSUFFICIENT_PERMISSION("insufficient-permission", "{node}");

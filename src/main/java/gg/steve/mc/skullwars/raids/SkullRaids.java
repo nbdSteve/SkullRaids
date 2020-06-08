@@ -1,10 +1,9 @@
 package gg.steve.mc.skullwars.raids;
 
-import com.massivecraft.factions.FactionsPlugin;
-import gg.steve.mc.skullwars.raids.fcmd.FSetBaseCmd;
-import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
 import gg.steve.mc.skullwars.raids.framework.SetupManager;
+import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.utils.FileManagerUtil;
+import gg.steve.mc.skullwars.raids.papi.SkullRaidsExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,6 +25,13 @@ public final class SkullRaids extends JavaPlugin {
         SetupManager.registerCommands(instance);
         SetupManager.registerEvents(instance);
         SetupManager.loadPluginCache();
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            LogUtil.warning("Unable to find the required plugin, PlaceholderAPI, please install it to use this plugin.");
+            Bukkit.getPluginManager().disablePlugin(instance);
+        } else {
+            new SkullRaidsExpansion(instance).register();
+            LogUtil.info("PlaceholderAPI plugin found, hooking into it now...");
+        }
         LogUtil.info("Successfully enabled SkullRaids v" + getDescription().getVersion() + ", please contact nbdSteve#0583 if you find any bugs.");
     }
 

@@ -3,6 +3,7 @@ package gg.steve.mc.skullwars.raids.listener;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
+import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
 import gg.steve.mc.skullwars.raids.framework.utils.ColorUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import gg.steve.mc.skullwars.raids.raid.FRaid;
@@ -34,7 +35,7 @@ public class TnTListener implements Listener {
         if (event.getBlock().getType() != Material.DISPENSER) return;
         Faction faction = Board.getInstance().getFactionAt(new FLocation(event.getBlock().getLocation()));
         if (faction.isWilderness() || faction.isWarZone() || faction.isSafeZone()) {
-            event.getPlayer().sendRawMessage("You may only place dispensers in faction claims.");
+            GeneralMessage.DISPENSERS_IN_CLAIMS.message(event.getPlayer());
             event.setCancelled(true);
         }
     }
@@ -65,22 +66,22 @@ public class TnTListener implements Listener {
         if (attacking.equals(defending)) return;
         if (FRaidManager.isRaidActive(defending)) {
             if (!FRaidManager.isAttacking(attacking, defending, event.getLocation().getChunk())) {
-                attacking.sendMessage(FRaidManager.getFRaid(defending, event.getLocation().getChunk()).getAttacking().getTag() + " is already raiding " + defending.getTag() + ", your shots are not effective.");
+                GeneralMessage.ALREADY_BEING_RAIDED.doFactionMessage(attacking, defending.getTag(), FRaidManager.getFRaid(defending, event.getLocation().getChunk()).getAttacking().getTag());
                 event.setCancelled(true);
             }
             FRaid fRaid = FRaidManager.getFRaid(defending, attacking, event.getLocation().getChunk());
             if (fRaid.getPhase() == FRaidPhase.PHASE_3) {
                 event.setCancelled(true);
             } else {
-                attacking.sendMessage("TNT has been shot, the raid has been reset to phase one");
-                defending.sendMessage("TNT has been shot, the raid has been reset to phase one");
+                GeneralMessage.PHASE_1_RESET.doFactionMessage(attacking);
+                GeneralMessage.PHASE_1_RESET.doFactionMessage(defending);
                 fRaid.reset();
             }
-            if (fRaid.isMainFBase()) {
+            if (fRaid.isMainFBase() && !fRaid.isRaided()) {
                 if (fRaid.getFBase().isSpawnerChunk(event.getLocation().getChunk())) {
                     fRaid.setRaided(true);
                     for (String line : Files.CONFIG.get().getStringList("phase-4-broadcast")) {
-                        Bukkit.broadcastMessage(ColorUtil.colorize(line).replace("{attacker}", attacking.getTag()).replace("{defending}", defending.getTag()));
+                        Bukkit.broadcastMessage(ColorUtil.colorize(line).replace("{attacking}", attacking.getTag()).replace("{defending}", defending.getTag()));
                     }
                 }
             }

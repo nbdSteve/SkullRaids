@@ -6,7 +6,8 @@ import com.massivecraft.factions.Factions;
 import gg.steve.mc.skullwars.raids.core.BaseClaim;
 import gg.steve.mc.skullwars.raids.core.FBase;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
-import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
+import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
+import gg.steve.mc.skullwars.raids.framework.utils.ColorUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class FRaid {
     private UUID raidId;
     private FRaidPhase phase;
-    private int remaining;
+    private int remaining, timeSinceLastShot;
     private Faction attacking, defending;
     private boolean isGen, isAntiLeach, isMainFBase, isRaided;
     private FRaidFile fRaidData;
@@ -37,6 +38,7 @@ public class FRaid {
         this.origin = world.getChunkAt(conf.getInt("origin.chunk-x"), conf.getInt("origin.chunk-z"));
         this.phase = FRaidPhase.valueOf(conf.getString("raid.phase"));
         this.remaining = conf.getInt("raid.remaining");
+        this.timeSinceLastShot = conf.getInt("raid.last-shot");
         this.isGen = conf.getBoolean("isGen");
         this.isAntiLeach = conf.getBoolean("isAntiLeach");
         this.isMainFBase = conf.getBoolean("isMainFBase");
@@ -71,20 +73,28 @@ public class FRaid {
         }
         this.origin = origin;
         this.fRaidData = new FRaidFile(raidId, defending, attacking, origin, isMainFBase);
-        defending.sendMessage(attacking.getTag() + " has started raiding you!");
-        attacking.sendMessage("You have started raiding " + defending.getTag());
+        GeneralMessage.PHASE_1_ATTACKING.doFactionMessage(this.attacking, this.defending.getTag());
+        GeneralMessage.PHASE_1_DEFENDING.doFactionMessage(this.defending, this.attacking.getTag());
     }
 
     public void decrementRemaining() {
         if (this.remaining <= 0) {
             this.phase = FRaidPhase.getNextPhase(this.phase);
-            LogUtil.info("changed raid phase to: " + this.phase.name());
             if (this.phase == FRaidPhase.COMPLETE) {
+                for (String line : Files.CONFIG.get().getStringList("complete-broadcast")) {
+                    Bukkit.broadcastMessage(ColorUtil.colorize(line).replace("{attacking}", attacking.getTag()).replace("{defending}", defending.getTag()));
+                }
                 FRaidManager.removeFRaid(this.raidId);
                 this.fRaidData.delete();
             } else {
                 if (this.phase == FRaidPhase.PHASE_2) {
+                    GeneralMessage.PHASE_2_ATTACKING.doFactionMessage(this.attacking, this.defending.getTag());
+                    GeneralMessage.PHASE_2_DEFENDING.doFactionMessage(this.defending, this.attacking.getTag());
                     this.isGen = true;
+                } else if (this.phase == FRaidPhase.PHASE_3) {
+                    GeneralMessage.PHASE_3_ATTACKING.doFactionMessage(this.attacking, this.defending.getTag());
+                    GeneralMessage.PHASE_3_DEFENDING.doFactionMessage(this.defending, this.attacking.getTag());
+                    this.isAntiLeach = false;
                 }
                 // do update message
                 this.remaining = this.phase.getDuration();
@@ -96,12 +106,14 @@ public class FRaid {
             }
             this.remaining--;
         }
+        this.timeSinceLastShot++;
     }
 
     public void reset() {
         this.phase = FRaidPhase.PHASE_1;
         this.isGen = false;
         this.remaining = this.phase.getDuration();
+        this.timeSinceLastShot = 0;
     }
 
     public void initiateAntiLeach() {
@@ -112,12 +124,12 @@ public class FRaid {
             if (this.isMainFBase) {
                 if (this.fBase.isChunkRegistered(player.getLocation().getChunk())) {
                     player.teleport(this.origin.getWorld().getSpawnLocation());
-                    player.sendRawMessage("Anti Leach has activated, you have been sent to spawn");
+                    GeneralMessage.ANTI_LEACH.message(player);
                 }
             } else {
                 if (this.claim.isClaimChunk(player.getLocation().getChunk())) {
                     player.teleport(this.origin.getWorld().getSpawnLocation());
-                    player.sendRawMessage("Anti Leach has activated, you have been sent to spawn");
+                    GeneralMessage.ANTI_LEACH.message(player);
                 }
             }
         }
@@ -133,6 +145,7 @@ public class FRaid {
         conf.set("faction.attacking", this.attacking.getId());
         conf.set("raid.phase", this.phase.name());
         conf.set("raid.remaining", this.remaining);
+        conf.set("raid.last-shot", this.timeSinceLastShot);
         conf.set("isGen", this.isGen);
         conf.set("isAntiLeach", this.isAntiLeach);
         conf.set("isMainFBase", this.isMainFBase);
@@ -178,6 +191,10 @@ public class FRaid {
 
     public boolean isRaided() {
         return isRaided;
+    }
+
+    public int getTimeSinceLastShot() {
+        return timeSinceLastShot;
     }
 
     public void setRaided(boolean raided) {

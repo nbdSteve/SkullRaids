@@ -8,4 +8,9 @@ phase-duration:
   3: 1800
 
 phase-4-broadcast:
-  - '&5&lALERT! &b{attacker} &7has just raided &b{defender}!'
+  - '&5&lALERT! &b{attacking} &7has just raided &b{defending}!'
+
+complete-broadcast:
+  - '&5&lALERT! &b{defending} &7has survived the raid from &b{attacking}&7.'
+
+no-raid-active-placeholder: 'No raid active'

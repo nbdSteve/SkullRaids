@@ -12,3 +12,73 @@ invalid-command:
   action-bar: false
   text:
     - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7The command you entered is invalid.'
+
+unclaim-raid-active:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7You are unable to unclaim land while a raid is active.'
+
+unclaim-spawner-chunk:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7You can not unclaim a spawner chunk, contact an admin.'
+
+disband-raid:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7You are unable disband your faction while a raid is active.'
+
+no-faction:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7You must be in a faction to set your faction base.'
+
+not-leader:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7You must be the leader of the faction to use that command.'
+
+not-in-territory:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7You must be in your own territory to use that command.'
+
+already-spawner-chunk:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7The chunk you are standing in is already registered as a spawner chunk.'
+
+fbase-register:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7You has successfully created your fbase, spawner chunks must be connected to this one.'
+
+max-spawner-chunks:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7You already have the maximum amount of spawner chunks for your faction base.'
+
+not-connected:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7This chunk is not connected to other spawner chunks, aborting.'
+
+add-spawner-chunk:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7You have registered the chunk you are standing in as a spawner chunk.'
+
+not-in-claim:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7You are not standing in a faction claim.'
+
+no-fbase-set:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids &4(&c&lERROR&4)&d| &7This faction does not have an fbase set.'
+
+removed-fbase:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7You have removed this factions faction base.'

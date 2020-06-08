@@ -4,6 +4,7 @@ import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
+import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
 import gg.steve.mc.skullwars.raids.raid.FRaidManager;
 import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
@@ -20,7 +21,7 @@ public class WallListener implements Listener {
         if (defending.equals(attacking)) return;
         if (FRaidManager.isRaidActive(defending)) {
             if (!FRaidManager.isAttacking(attacking, defending, chunk) && FRaidManager.getFRaid(defending, chunk).isAntiLeach()) {
-                event.getPlayer().sendRawMessage(FRaidManager.getFRaid(defending, chunk).getAttacking().getTag() + " is already raiding " + defending.getTag() + ", you can not enter their land.");
+                GeneralMessage.ANTI_LEACH_WALL.message(event.getPlayer(), defending.getTag());
                 event.setCancelled(true);
             }
         }

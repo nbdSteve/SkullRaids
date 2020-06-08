@@ -27,33 +27,32 @@ public class FSetBaseCmd extends FCommand {
             return;
         }
         if (faction.isWilderness() || faction.isSafeZone() || faction.isWarZone()) {
-            sender.sendMessage("You can not set the base region if you do not have a faction.");
+            DebugMessage.NO_FACTION.message(sender.getPlayer());
             return;
         }
         if (!sender.equals(faction.getFPlayerLeader())) {
-            sender.sendMessage("Only the leader of the faction can use this command.");
+            DebugMessage.NOT_LEADER.message(sender.getPlayer());
             return;
         }
         if (!sender.isInOwnTerritory()) {
-            sender.sendMessage("You must be in your own territory to use that command.");
+            DebugMessage.NOT_IN_TERRITORY.message(sender.getPlayer());
             return;
         }
         if (FBaseManager.isSpawnerChunk(faction, sender.getPlayer().getLocation().getChunk())) {
-            sender.sendMessage("This chunk is already a spawner chunk, you can not change it.");
+            DebugMessage.ALREADY_SPAWNER_CHUNK.message(sender.getPlayer());
             return;
         }
         if (!FBaseManager.isFBaseSet(faction)) {
             FBaseManager.createFBase(faction, sender.getPlayer().getLocation());
-            sender.sendMessage("Successfully registered your faction base.");
+            DebugMessage.FBASE_REGISTER.message(sender.getPlayer());
         } else if (FBaseManager.getFBase(faction).getSpawnerChunkCount() >= Files.CONFIG.get().getInt("max-spawner-chunks")) {
-            sender.sendMessage("You already have the maximum amount of spawner chunks.");
+            DebugMessage.MAX_SPAWNER_CHUNKS.message(sender.getPlayer());
         } else if (!FBaseManager.getFBase(faction).canBeSpawnerChunk(sender.getPlayer().getLocation().getChunk())) {
-            sender.sendMessage("All spawner chunks must be connected, this claim can not be a spawner chunk.");
+            DebugMessage.NOT_CONNECTED.message(sender.getPlayer());
         } else {
             FBaseManager.getFBase(faction).addSpawnerChunk(sender.getPlayer().getLocation().getChunk());
-            sender.sendMessage("You have successfully added a spawner chunk to your factions claim.");
+            DebugMessage.ADD_SPAWNER_CHUNK.message(sender.getPlayer());
         }
-        // then register the fbase
     }
 
     @Override

@@ -86,4 +86,20 @@ public class FRaidManager {
         }
         return null;
     }
+
+    public static boolean isRaiding(Faction faction) {
+        for (UUID raidId : activeRaids.keySet()) {
+            FRaid fRaid = activeRaids.get(raidId);
+            if (fRaid.getAttacking().equals(faction) || fRaid.getDefending().equals(faction)) return true;
+        }
+        return false;
+    }
+
+    public static FRaid getFRaid(Faction faction) {
+        for (UUID raidId : activeRaids.keySet()) {
+            FRaid fRaid = activeRaids.get(raidId);
+            if (fRaid.getAttacking().equals(faction) || fRaid.getDefending().equals(faction)) return fRaid;
+        }
+        return null;
+    }
 }

@@ -28,15 +28,15 @@ public class FUnsetBaseCmd extends FCommand {
             return;
         }
         if (faction == null || faction.isWilderness() || faction.isSafeZone() || faction.isWarZone()) {
-            player.sendRawMessage("You are not standing in a faction claim at the moment.");
+            DebugMessage.NOT_IN_CLAIM.message(player);
             return;
         }
         if (!FBaseManager.isFBaseSet(faction)) {
-            player.sendRawMessage("That faction does not have an fbase set.");
+            DebugMessage.NO_FBASE_SET.message(player);
             return;
         }
         FBaseManager.unsetFBase(faction);
-        player.sendRawMessage("You have successfully removed " + faction.getTag() + "'s base.");
+        DebugMessage.REMOVED_FBASE.message(player);
     }
 
     @Override

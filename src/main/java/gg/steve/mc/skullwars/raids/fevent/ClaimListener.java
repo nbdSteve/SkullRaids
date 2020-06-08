@@ -6,6 +6,7 @@ import com.massivecraft.factions.event.FactionDisbandEvent;
 import com.massivecraft.factions.event.LandUnclaimAllEvent;
 import com.massivecraft.factions.event.LandUnclaimEvent;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
+import gg.steve.mc.skullwars.raids.framework.message.DebugMessage;
 import gg.steve.mc.skullwars.raids.raid.FRaidManager;
 import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
@@ -20,13 +21,13 @@ public class ClaimListener implements Listener {
         Chunk chunk = event.getLocation().getChunk();
         if (FRaidManager.isRaidActive(faction)) {
             event.setCancelled(true);
-            faction.sendMessage("You are unable to unclaim land while you are being raided");
+            DebugMessage.UNCLAIM_RAID_ACTIVE.message(event.getfPlayer().getPlayer());
             return;
         }
         if (!FBaseManager.isFBaseSet(faction)) return;
         if (FBaseManager.isSpawnerChunk(faction, chunk)) {
-            event.getfPlayer().sendMessage("You can not unclaim a spawner chunk.");
             event.setCancelled(true);
+            DebugMessage.UNCLAIM_SPAWNER_CHUNK.message(event.getfPlayer().getPlayer());
         } else {
             FBaseManager.removeBaseChunk(faction, chunk);
         }
@@ -37,7 +38,7 @@ public class ClaimListener implements Listener {
         Faction faction = event.getFaction();
         if (FRaidManager.isRaidActive(faction)) {
             event.setCancelled(true);
-            faction.sendMessage("You are unable to unclaim land while you are being raided");
+            DebugMessage.UNCLAIM_RAID_ACTIVE.message(event.getfPlayer().getPlayer());
             return;
         }
         if (!FBaseManager.isFBaseSet(faction)) return;
@@ -49,7 +50,7 @@ public class ClaimListener implements Listener {
         Faction faction = event.getFaction();
         if (FRaidManager.isRaidActive(faction)) {
             event.setCancelled(true);
-            faction.sendMessage("You are unable to disband while you are being raided");
+            DebugMessage.DISBAND_RAID_ACTIVE.message(event.getPlayer());
             return;
         }
         if (!FBaseManager.isFBaseSet(faction)) return;
@@ -62,19 +63,19 @@ public class ClaimListener implements Listener {
         if (event.getMessage().equalsIgnoreCase("/f unclaim")) {
             if (FRaidManager.isRaidActive(faction)) {
                 event.setCancelled(true);
-                faction.sendMessage("You are unable to unclaim land while you are being raided.");
+                DebugMessage.UNCLAIM_RAID_ACTIVE.message(event.getPlayer());
                 return;
             }
         } else if (event.getMessage().equalsIgnoreCase("/f unclaimall")) {
             if (FRaidManager.isRaidActive(faction)) {
                 event.setCancelled(true);
-                faction.sendMessage("You are unable to unclaim land while you are being raided.");
+                DebugMessage.UNCLAIM_RAID_ACTIVE.message(event.getPlayer());
                 return;
             }
         } else if (event.getMessage().equalsIgnoreCase("/f disband")) {
             if (FRaidManager.isRaidActive(faction)) {
                 event.setCancelled(true);
-                faction.sendMessage("You are unable to disband while you are being raided.");
+                DebugMessage.DISBAND_RAID_ACTIVE.message(event.getPlayer());
                 return;
             }
         }

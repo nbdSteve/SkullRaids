@@ -53,6 +53,7 @@ public class FRaidFile extends PluginFile {
         config.set("faction.attacking", attacking.getId());
         config.set("raid.phase", FRaidPhase.PHASE_1.name());
         config.set("raid.remaining", FRaidPhase.PHASE_1.getDuration());
+        config.set("raid.last-shot", 0);
         config.set("isGen", false);
         config.set("isAntiLeach", false);
         config.set("isMainFBase", isMainFBase);
