@@ -71,8 +71,7 @@ public class FBase {
     }
 
     public boolean isSpawnerChunk(Chunk chunk) {
-        if (!this.base.containsKey(chunk)) return false;
-        return this.base.get(chunk);
+        return this.spawnerChunks.contains(chunk);
     }
 
     public FBaseFile getfBaseData() {
@@ -89,13 +88,17 @@ public class FBase {
     }
 
     public boolean isChunkRegistered(Chunk chunk) {
-        return (this.base.containsKey(chunk));
+        return this.base.containsKey(chunk) || this.spawnerChunks.contains(chunk);
     }
 
     public boolean removeBaseChunk(Chunk chunk) {
         if (!this.base.containsKey(chunk)) return false;
         if (this.base.get(chunk)) this.spawnerChunks.remove(chunk);
         return this.base.remove(chunk) != null;
+    }
+
+    public int getSpawnerChunkCount() {
+        return this.spawnerChunks.size();
     }
 
     private List<Chunk> convertStringToChunks() {

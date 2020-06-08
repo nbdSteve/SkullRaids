@@ -7,7 +7,7 @@ import java.io.File;
 
 public enum Files {
     // generic
-    CONFIG("example.yml"),
+    CONFIG("skull-raids.yml"),
     // permissions
     PERMISSIONS("permissions.yml"),
     // lang

@@ -6,3 +6,7 @@ prefix: SkullRaids
 depend: [Factions]
 authors: [stevegoodhill]
 description: Raids plugin for the SkullWars network, developed by nbdSteve.
+commands:
+  sr:
+    usage: /<command>
+    description: Main command for SkullRaids plugin

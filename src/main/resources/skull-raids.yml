@@ -1,0 +1,11 @@
+max-spawner-chunks: 64
+
+anti-leach-delay: 300
+
+phase-duration:
+  1: 900
+  2: 900
+  3: 1800
+
+phase-4-broadcast:
+  - '&5&lALERT! &b{attacker} &7has just raided &b{defender}!'

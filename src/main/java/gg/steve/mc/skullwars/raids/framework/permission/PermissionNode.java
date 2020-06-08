@@ -4,9 +4,11 @@ import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import org.bukkit.command.CommandSender;
 
 public enum PermissionNode {
+    // fcmd
+    SET("f-command.set"),
+    UN_SET("f-command.un-set"),
     // cmd
     RELOAD("command.reload"),
-    GIVE("command.give"),
     HELP("command.help");
 
     private String path;

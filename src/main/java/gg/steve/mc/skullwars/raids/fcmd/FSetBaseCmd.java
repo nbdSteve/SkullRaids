@@ -6,6 +6,9 @@ import com.massivecraft.factions.cmd.CommandContext;
 import com.massivecraft.factions.cmd.FCommand;
 import com.massivecraft.factions.zcore.util.TL;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
+import gg.steve.mc.skullwars.raids.framework.message.DebugMessage;
+import gg.steve.mc.skullwars.raids.framework.permission.PermissionNode;
+import gg.steve.mc.skullwars.raids.framework.yml.Files;
 
 public class FSetBaseCmd extends FCommand {
 
@@ -19,6 +22,10 @@ public class FSetBaseCmd extends FCommand {
     public void perform(CommandContext context) {
         FPlayer sender = context.fPlayer;
         Faction faction = context.faction;
+        if (!PermissionNode.SET.hasPermission(sender.getPlayer())) {
+            DebugMessage.INSUFFICIENT_PERMISSION.message(sender.getPlayer(), PermissionNode.SET.get());
+            return;
+        }
         if (faction.isWilderness() || faction.isSafeZone() || faction.isWarZone()) {
             sender.sendMessage("You can not set the base region if you do not have a faction.");
             return;
@@ -38,6 +45,10 @@ public class FSetBaseCmd extends FCommand {
         if (!FBaseManager.isFBaseSet(faction)) {
             FBaseManager.createFBase(faction, sender.getPlayer().getLocation());
             sender.sendMessage("Successfully registered your faction base.");
+        } else if (FBaseManager.getFBase(faction).getSpawnerChunkCount() >= Files.CONFIG.get().getInt("max-spawner-chunks")) {
+            sender.sendMessage("You already have the maximum amount of spawner chunks.");
+        } else if (!FBaseManager.getFBase(faction).canBeSpawnerChunk(sender.getPlayer().getLocation().getChunk())) {
+            sender.sendMessage("All spawner chunks must be connected, this claim can not be a spawner chunk.");
         } else {
             FBaseManager.getFBase(faction).addSpawnerChunk(sender.getPlayer().getLocation().getChunk());
             sender.sendMessage("You have successfully added a spawner chunk to your factions claim.");

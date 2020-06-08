@@ -1,0 +1,7 @@
+command:
+  help: skullraids.help
+  reload: skullraids.reload
+
+f-command:
+  set: skullraids.fcmd.set
+  un-set: skullraids.fcmd.unset

@@ -1,0 +1,28 @@
+package gg.steve.mc.skullwars.raids.listener;
+
+import com.massivecraft.factions.Board;
+import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.FPlayers;
+import com.massivecraft.factions.Faction;
+import gg.steve.mc.skullwars.raids.raid.FRaidManager;
+import org.bukkit.Chunk;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerMoveEvent;
+
+public class WallListener implements Listener {
+
+    @EventHandler
+    public void move(PlayerMoveEvent event) {
+        Chunk chunk = event.getTo().getChunk();
+        Faction defending = Board.getInstance().getFactionAt(new FLocation(event.getTo()));
+        Faction attacking = FPlayers.getInstance().getByPlayer(event.getPlayer()).getFaction();
+        if (defending.equals(attacking)) return;
+        if (FRaidManager.isRaidActive(defending)) {
+            if (!FRaidManager.isAttacking(attacking, defending, chunk) && FRaidManager.getFRaid(defending, chunk).isAntiLeach()) {
+                event.getPlayer().sendRawMessage(FRaidManager.getFRaid(defending, chunk).getAttacking().getTag() + " is already raiding " + defending.getTag() + ", you can not enter their land.");
+                event.setCancelled(true);
+            }
+        }
+    }
+}

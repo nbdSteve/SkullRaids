@@ -4,14 +4,14 @@ import com.massivecraft.factions.Faction;
 import gg.steve.mc.skullwars.raids.SkullRaids;
 import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.PluginFile;
-import org.bukkit.Location;
+import org.bukkit.Chunk;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.UUID;
 
 public class FRaidFile extends PluginFile {
     //Store the file name string
@@ -21,13 +21,13 @@ public class FRaidFile extends PluginFile {
     //Store the yaml config
     private YamlConfiguration config;
 
-    public FRaidFile(Faction defending) {
-        this.load(defending.getId(), SkullRaids.getInstance());
+    public FRaidFile(UUID raidId) {
+        this.load(String.valueOf(raidId), SkullRaids.getInstance());
     }
 
-    public FRaidFile(Faction defending, Faction raiding) {
-        this.load(defending.getId(), SkullRaids.getInstance());
-        setupFactionFileDefaults(this.config, defending, raiding);
+    public FRaidFile(UUID raidId, Faction defending, Faction raiding, Chunk origin, boolean isMainFBase) {
+        this.load(String.valueOf(raidId), SkullRaids.getInstance());
+        setupFactionFileDefaults(this.config, raidId, defending, raiding, origin, isMainFBase);
     }
 
     @Override
@@ -43,14 +43,20 @@ public class FRaidFile extends PluginFile {
         return this;
     }
 
-    private void setupFactionFileDefaults(YamlConfiguration config, Faction defending, Faction attacking) {
+    private void setupFactionFileDefaults(YamlConfiguration config, UUID raidId, Faction defending, Faction attacking, Chunk origin, boolean isMainFBase) {
         //Set defaults for the information about the players tiers and currency
+        config.set("raid-id", String.valueOf(raidId));
+        config.set("origin.world", origin.getWorld().getName());
+        config.set("origin.chunk-x", origin.getX());
+        config.set("origin.chunk-z", origin.getZ());
         config.set("faction.defending", defending.getId());
         config.set("faction.attacking", attacking.getId());
         config.set("raid.phase", FRaidPhase.PHASE_1.name());
         config.set("raid.remaining", FRaidPhase.PHASE_1.getDuration());
         config.set("isGen", false);
         config.set("isAntiLeach", false);
+        config.set("isMainFBase", isMainFBase);
+        config.set("isRaided", false);
         save();
     }
 

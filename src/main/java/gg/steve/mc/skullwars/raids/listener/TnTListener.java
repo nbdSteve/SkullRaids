@@ -3,21 +3,20 @@ package gg.steve.mc.skullwars.raids.listener;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
+import gg.steve.mc.skullwars.raids.framework.utils.ColorUtil;
+import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import gg.steve.mc.skullwars.raids.raid.FRaid;
 import gg.steve.mc.skullwars.raids.raid.FRaidManager;
 import gg.steve.mc.skullwars.raids.raid.FRaidPhase;
+import net.catalyst.events.TNTDispensedEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.material.Dispenser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,26 +33,21 @@ public class TnTListener implements Listener {
     public void place(BlockPlaceEvent event) {
         if (event.getBlock().getType() != Material.DISPENSER) return;
         Faction faction = Board.getInstance().getFactionAt(new FLocation(event.getBlock().getLocation()));
-        if (faction.isWilderness() || faction.isWarZone() || faction.isSafeZone()){
+        if (faction.isWilderness() || faction.isWarZone() || faction.isSafeZone()) {
             event.getPlayer().sendRawMessage("You may only place dispensers in faction claims.");
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void dispenser(BlockDispenseEvent event) {
+    public void tnt(TNTDispensedEvent event) {
         if (Bukkit.isGracePeriod()) return;
-        if (event.getItem().getType() != Material.TNT) return;
-        Faction attacking = Board.getInstance().getFactionAt(new FLocation(event.getBlock().getLocation()));
-        if (attacking.isWilderness() || attacking.isWarZone() || attacking.isSafeZone()){
+        Faction attacking = Board.getInstance().getFactionAt(new FLocation(event.getEntity().getLocation()));
+        if (attacking.isWilderness() || attacking.isWarZone() || attacking.isSafeZone()) {
             event.setCancelled(true);
             return;
         }
-        event.setCancelled(true);
-        Dispenser dispenser = (Dispenser) event.getBlock().getState().getData();
-        BlockFace face = dispenser.getFacing();
-        TNTPrimed primed = (TNTPrimed) event.getBlock().getWorld().spawnEntity(event.getBlock().getRelative(face).getLocation().add(0.5, 0, 0.5), EntityType.PRIMED_TNT);
-        factionTnT.put(primed.getUniqueId(), attacking);
+        factionTnT.put(event.getEntity().getUniqueId(), attacking);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -70,16 +64,28 @@ public class TnTListener implements Listener {
         factionTnT.remove(event.getEntity().getUniqueId());
         if (attacking.equals(defending)) return;
         if (FRaidManager.isRaidActive(defending)) {
-            if (!FRaidManager.isAttackingFaction(attacking, defending)) {
-                attacking.sendMessage(FRaidManager.getFRaid(defending).getAttacking().getTag() + " is already raiding "+ defending.getTag() + ", your shots are not effective.");
+            if (!FRaidManager.isAttacking(attacking, defending, event.getLocation().getChunk())) {
+                attacking.sendMessage(FRaidManager.getFRaid(defending, event.getLocation().getChunk()).getAttacking().getTag() + " is already raiding " + defending.getTag() + ", your shots are not effective.");
                 event.setCancelled(true);
             }
-            FRaid fRaid = FRaidManager.getFRaid(defending);
+            FRaid fRaid = FRaidManager.getFRaid(defending, attacking, event.getLocation().getChunk());
             if (fRaid.getPhase() == FRaidPhase.PHASE_3) {
                 event.setCancelled(true);
+            } else {
+                attacking.sendMessage("TNT has been shot, the raid has been reset to phase one");
+                defending.sendMessage("TNT has been shot, the raid has been reset to phase one");
+                fRaid.reset();
+            }
+            if (fRaid.isMainFBase()) {
+                if (fRaid.getFBase().isSpawnerChunk(event.getLocation().getChunk())) {
+                    fRaid.setRaided(true);
+                    for (String line : Files.CONFIG.get().getStringList("phase-4-broadcast")) {
+                        Bukkit.broadcastMessage(ColorUtil.colorize(line).replace("{attacker}", attacking.getTag()).replace("{defending}", defending.getTag()));
+                    }
+                }
             }
         } else {
-            FRaidManager.addFRaid(defending, attacking);
+            FRaidManager.addFRaid(defending, attacking, event.getLocation().getChunk());
         }
     }
 }

@@ -1,9 +1,19 @@
 help:
   action-bar: false
   text:
-    - '&5&lPlugin&d| &7Example help message.'
+    - '&5&lSkullRaids&d| &7Example help message.'
 
 reload:
   action-bar: false
   text:
-    - '&5&lPlugin&d| &7Example reload message&7.'
+    - '&5&lSkullRaids&d| &7You have successfully reloaded the plugin.'
+
+phase-1-reset:
+  action-base: false
+  text:
+    - '&5&lSkullRaids&d| &7TNT exploded in the claim, the raid has been reset to phase 1.'
+
+anit-leach:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7Anti Leach has activated, you have been sent to spawn.'

@@ -1,16 +1,17 @@
 package gg.steve.mc.skullwars.raids.framework;
 
 import com.massivecraft.factions.FactionsPlugin;
-import gg.steve.mc.skullwars.raids.core.FBase;
+import gg.steve.mc.skullwars.raids.SkullRaids;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
 import gg.steve.mc.skullwars.raids.fcmd.FSetBaseCmd;
 import gg.steve.mc.skullwars.raids.fcmd.FUnsetBaseCmd;
 import gg.steve.mc.skullwars.raids.fevent.ClaimListener;
+import gg.steve.mc.skullwars.raids.framework.cmd.SkullRaidsCmd;
+import gg.steve.mc.skullwars.raids.listener.WallListener;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import gg.steve.mc.skullwars.raids.framework.yml.utils.FileManagerUtil;
 import gg.steve.mc.skullwars.raids.listener.SpawnerListener;
 import gg.steve.mc.skullwars.raids.listener.TnTListener;
-import gg.steve.mc.skullwars.raids.raid.FRaid;
 import gg.steve.mc.skullwars.raids.raid.FRaidManager;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -40,6 +41,7 @@ public class SetupManager {
     public static void registerCommands(JavaPlugin instance) {
         FactionsPlugin.getInstance().cmdBase.addSubCommand(new FSetBaseCmd());
         FactionsPlugin.getInstance().cmdBase.addSubCommand(new FUnsetBaseCmd());
+        instance.getCommand("sr").setExecutor(new SkullRaidsCmd());
     }
 
     /**
@@ -52,6 +54,7 @@ public class SetupManager {
         pm.registerEvents(new ClaimListener(), instance);
         pm.registerEvents(new SpawnerListener(), instance);
         pm.registerEvents(new TnTListener(), instance);
+        pm.registerEvents(new WallListener(), instance);
     }
 
     public static void registerEvent(JavaPlugin instance, Listener listener) {
