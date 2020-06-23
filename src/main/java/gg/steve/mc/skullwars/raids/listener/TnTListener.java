@@ -53,7 +53,7 @@ public class TnTListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void explode(EntityExplodeEvent event) {
-        if (Bukkit.isGracePeriod()) return;
+        if (event.isCancelled() || Bukkit.isGracePeriod()) return;
         if (!factionTnT.containsKey(event.getEntity().getUniqueId())) {
             event.setCancelled(true);
             return;
@@ -87,6 +87,8 @@ public class TnTListener implements Listener {
             }
         } else {
             FRaidManager.addFRaid(defending, attacking, event.getLocation().getChunk());
+            FRaidManager.shutdownRaidCache();
+            FRaidManager.loadRaids();
         }
     }
 }

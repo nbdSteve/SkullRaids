@@ -62,7 +62,7 @@ public class BaseLoaderUtil {
             Block block = this.world.getBlockAt(chunk.getX() * 16, 100, chunk.getZ() * 16);
             if (Board.getInstance().getFactionAt(new FLocation(block)).getId().equalsIgnoreCase(faction.getId())) {
                 this.claim.addClaim(chunk);
-                checkNeighbors(new PointUtil(chunk.getX(), chunk.getZ()));
+                checkNeighborsRegular(new PointUtil(chunk.getX(), chunk.getZ()));
                 neighborFound = true;
             }
         }

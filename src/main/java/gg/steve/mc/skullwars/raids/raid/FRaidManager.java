@@ -2,6 +2,7 @@ package gg.steve.mc.skullwars.raids.raid;
 
 import com.massivecraft.factions.Faction;
 import gg.steve.mc.skullwars.raids.SkullRaids;
+import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 
@@ -21,7 +22,8 @@ public class FRaidManager {
             UUID raidId = UUID.fromString(file.getName().split(".yml")[0]);
             activeRaids.put(raidId, new FRaid(raidId));
         }
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(SkullRaids.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(SkullRaids.getInstance(), () -> {
+            if (activeRaids.isEmpty()) return;
             for (FRaid raid : activeRaids.values()) {
                 raid.decrementRemaining();
             }

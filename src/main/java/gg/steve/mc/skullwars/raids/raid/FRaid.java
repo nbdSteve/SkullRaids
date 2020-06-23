@@ -8,6 +8,7 @@ import gg.steve.mc.skullwars.raids.core.FBase;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
 import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
 import gg.steve.mc.skullwars.raids.framework.utils.ColorUtil;
+import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -56,6 +57,7 @@ public class FRaid {
         this.defending = defending;
         this.phase = FRaidPhase.PHASE_1;
         this.remaining = this.phase.getDuration();
+        this.timeSinceLastShot = 0;
         this.isGen = false;
         this.isAntiLeach = false;
         this.isRaided = false;
@@ -96,7 +98,6 @@ public class FRaid {
                     GeneralMessage.PHASE_3_DEFENDING.doFactionMessage(this.defending, this.attacking.getTag());
                     this.isAntiLeach = false;
                 }
-                // do update message
                 this.remaining = this.phase.getDuration();
             }
         } else {

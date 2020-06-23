@@ -52,7 +52,7 @@ public class FBaseFile extends PluginFile {
         config.set("spawner-chunks", new ArrayList<>());
         save();
         //Send a nice message
-        LogUtil.info("Successfully created a new faction roster file for faction with id: " + fileName + ", defaults have been set.");
+        LogUtil.info("Successfully created a new faction base file for faction with id: " + fileName + ", defaults have been set.");
     }
 
     @Override
