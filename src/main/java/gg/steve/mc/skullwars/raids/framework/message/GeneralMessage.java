@@ -18,6 +18,8 @@ public enum GeneralMessage {
     PHASE_1_RESET("phase-1-reset"),
     DISPENSERS_IN_CLAIMS("dispensers-in-claims"),
     ALREADY_BEING_RAIDED("already-being-raided", "{defending}", "{attacking}"),
+    FBASE_REMINDER("fbase-reminder"),
+    BLOCK_MESSAGE("max-placed"),
     // phases
     PHASE_1_ATTACKING("phase-1-attacking", "{defending}"),
     PHASE_1_DEFENDING("phase-1-defending", "{attacking}"),

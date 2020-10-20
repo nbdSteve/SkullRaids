@@ -18,12 +18,14 @@ public class WallListener implements Listener {
         Chunk chunk = event.getTo().getChunk();
         Faction defending = Board.getInstance().getFactionAt(new FLocation(event.getTo()));
         Faction attacking = FPlayers.getInstance().getByPlayer(event.getPlayer()).getFaction();
-        if (defending.equals(attacking)) return;
-        if (FRaidManager.isRaidActive(defending)) {
-            if (!FRaidManager.isAttacking(attacking, defending, chunk) && FRaidManager.getFRaid(defending, chunk).isAntiLeach()) {
-                GeneralMessage.ANTI_LEACH_WALL.message(event.getPlayer(), defending.getTag());
-                event.setCancelled(true);
-            }
+        if (!attacking.isWilderness() && !attacking.isWarZone() && !attacking.isSafeZone() && defending.equals(attacking))
+            return;
+//        if (defending.equals(attacking)) return;
+        if (FRaidManager.isRaidActive(defending)
+                && !FRaidManager.isAttacking(attacking, defending, chunk)
+                && FRaidManager.getFRaid(defending, chunk).isAntiLeach()) {
+            GeneralMessage.ANTI_LEACH_WALL.message(event.getPlayer(), defending.getTag());
+            event.setCancelled(true);
         }
     }
 }

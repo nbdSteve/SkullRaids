@@ -66,6 +66,10 @@
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>mvdw-software</id>
+            <url>http://repo.mvdw-software.be/content/groups/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -76,6 +80,7 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/src/main/lib/api-1.8.8-R0.2-SNAPSHOT.jar</systemPath>
         </dependency>
+
         <dependency>
             <groupId>com.github.SaberLLC</groupId>
             <artifactId>Saber-Factions</artifactId>

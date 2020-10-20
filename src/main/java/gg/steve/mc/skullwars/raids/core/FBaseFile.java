@@ -46,6 +46,8 @@ public class FBaseFile extends PluginFile {
     private void setupFactionFileDefaults(YamlConfiguration config, Location location) {
         //Set defaults for the information about the players tiers and currency
         int x = location.getChunk().getX(), z = location.getChunk().getZ();
+        config.set("raiding.is-protected", false);
+        config.set("raiding.protected-duration", 0);
         config.set("base.world", location.getWorld().getName());
         config.set("base.chunk-x", x);
         config.set("base.chunk-z", z);

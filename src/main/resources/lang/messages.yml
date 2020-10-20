@@ -67,3 +67,13 @@ gen-bucket-blocked:
   action-bar: false
   text:
     - '&5&lSkullRaids&d| &7You are not allowed to use gen buckets during phase 1 of a raid.'
+
+fbase-reminder:
+  action-bar: false
+  text:
+    - '&5&lSkullRaids&d| &7Please set a faction base using &e/f setbase&7.'
+
+max-placed:
+  action-bar: true
+  text:
+    - '&5&lSkullRaids&d| &7You can only place 10 blocks per minute whilst you are being raided.'

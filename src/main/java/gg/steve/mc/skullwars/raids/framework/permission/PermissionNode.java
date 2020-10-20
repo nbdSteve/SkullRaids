@@ -9,7 +9,9 @@ public enum PermissionNode {
     UN_SET("f-command.un-set"),
     // cmd
     RELOAD("command.reload"),
-    HELP("command.help");
+    HELP("command.help"),
+    END("command.end"),
+    PROTECT("command.protect");
 
     private String path;
 

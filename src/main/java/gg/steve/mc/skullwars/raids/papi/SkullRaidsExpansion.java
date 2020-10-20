@@ -48,18 +48,27 @@ public class SkullRaidsExpansion extends PlaceholderExpansion {
         if (!FRaidManager.isRaiding(fPlayer.getFaction()))
             return Files.CONFIG.get().getString("no-raid-active-placeholder");
         FRaid fRaid = FRaidManager.getFRaid(fPlayer.getFaction());
-        if (identifier.contains("last_shot")) {
+        if (identifier.equalsIgnoreCase("last_shot")) {
             TimeUtil time = new TimeUtil(fRaid.getTimeSinceLastShot());
-            if (identifier.equalsIgnoreCase("last_shot_hours")) {
-                return time.getHours();
+            StringBuilder builder = new StringBuilder();
+            if (!time.getHours().equalsIgnoreCase("0")) {
+//                return time.getHours();
+                builder.append(time.getHours() + "h");
             }
-            if (identifier.equalsIgnoreCase("last_shot_minutes")) {
-                return time.getMinutes();
+            if (!time.getMinutes().equalsIgnoreCase("0")) {
+//                return time.getMinutes();
+                if (!time.getHours().equalsIgnoreCase("0")) builder.append(" ");
+                builder.append(time.getMinutes() + "m");
             }
-            if (identifier.equalsIgnoreCase("last_shot_seconds")) {
-                return time.getSeconds();
+            if (!time.getSeconds().equalsIgnoreCase("0")) {
+//                return time.getSeconds();
+                if (!time.getMinutes().equalsIgnoreCase("0") || !time.getHours().equalsIgnoreCase("0")) builder.append(" ");
+                builder.append(time.getSeconds() + "s ");
             }
+            return builder.toString();
         }
+        if (identifier.equalsIgnoreCase("target")) return fRaid.getDefending().getTag();
+        if (identifier.equalsIgnoreCase("faction")) return fRaid.getAttacking().getTag();
         if (identifier.equalsIgnoreCase("current_phase")) {
             return String.valueOf(fRaid.getPhase().getWeight());
         }

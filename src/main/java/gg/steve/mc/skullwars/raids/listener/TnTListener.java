@@ -3,6 +3,10 @@ package gg.steve.mc.skullwars.raids.listener;
 import com.massivecraft.factions.Board;
 import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.Faction;
+import gg.steve.mc.skullwars.raids.SkullRaids;
+import gg.steve.mc.skullwars.raids.core.FBaseManager;
+import gg.steve.mc.skullwars.raids.featherboard.FeatherboardIntegration;
+import gg.steve.mc.skullwars.raids.framework.SetupManager;
 import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
 import gg.steve.mc.skullwars.raids.framework.utils.ColorUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
@@ -61,6 +65,10 @@ public class TnTListener implements Listener {
         if (event.getEntityType() != EntityType.PRIMED_TNT) return;
         Faction defending = Board.getInstance().getFactionAt(new FLocation(event.getEntity().getLocation()));
         if (defending.isWilderness() || defending.isWarZone() || defending.isSafeZone()) return;
+        if (FBaseManager.isProtected(defending)) {
+            event.setCancelled(true);
+            return;
+        }
         Faction attacking = factionTnT.get(event.getEntity().getUniqueId());
         factionTnT.remove(event.getEntity().getUniqueId());
         if (attacking.equals(defending)) return;
@@ -73,8 +81,8 @@ public class TnTListener implements Listener {
             if (fRaid.getPhase() == FRaidPhase.PHASE_3) {
                 event.setCancelled(true);
             } else {
-                GeneralMessage.PHASE_1_RESET.doFactionMessage(attacking);
-                GeneralMessage.PHASE_1_RESET.doFactionMessage(defending);
+//                GeneralMessage.PHASE_1_RESET.doFactionMessage(attacking);
+//                GeneralMessage.PHASE_1_RESET.doFactionMessage(defending);
                 fRaid.reset();
             }
             if (fRaid.isMainFBase() && !fRaid.isRaided()) {
@@ -87,8 +95,14 @@ public class TnTListener implements Listener {
             }
         } else {
             FRaidManager.addFRaid(defending, attacking, event.getLocation().getChunk());
-            FRaidManager.shutdownRaidCache();
-            FRaidManager.loadRaids();
+            if (Files.CONFIG.get().getBoolean("raid-scoreboard.enabled") && Bukkit.getPluginManager().getPlugin("Featherboard") != null) {
+                attacking.getOnlinePlayers().forEach(FeatherboardIntegration::showRaidBoard);
+                defending.getOnlinePlayers().forEach(FeatherboardIntegration::showRaidBoard);
+            }
+            Bukkit.getScheduler().scheduleSyncDelayedTask(SkullRaids.getInstance(), () -> {
+                SetupManager.shutdownPluginCache();
+                SetupManager.loadPluginCache();
+            }, 2L);
         }
     }
 }

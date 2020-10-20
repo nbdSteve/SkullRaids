@@ -3,6 +3,7 @@ package gg.steve.mc.skullwars.raids.core;
 import com.massivecraft.factions.Faction;
 import gg.steve.mc.skullwars.raids.core.utils.BaseLoaderUtil;
 import gg.steve.mc.skullwars.raids.core.utils.PointUtil;
+import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -21,10 +22,14 @@ public class FBase {
     private Chunk center;
     private World world;
     private FBaseFile fBaseData;
+    private boolean isProtected;
+    private int protectedDuration;
 
     public FBase(Faction faction) {
         this.faction = faction;
         this.fBaseData = new FBaseFile(faction);
+        this.isProtected = false;
+        this.protectedDuration = 0;
         this.world = Bukkit.getWorld(fBaseData.get().getString("base.world"));
         this.center = this.world.getChunkAt(fBaseData.get().getInt("base.chunk-x"),
                 fBaseData.get().getInt("base.chunk-z"));
@@ -36,6 +41,8 @@ public class FBase {
     public FBase(Faction faction, Location location) {
         this.faction = faction;
         this.fBaseData = new FBaseFile(faction, location);
+        this.isProtected = this.fBaseData.get().getBoolean("raiding.is-protected");
+        this.protectedDuration = this.fBaseData.get().getInt("raiding.protected-duration");
         this.world = location.getWorld();
         this.center = location.getChunk();
         this.spawnerChunks = convertStringToChunks();
@@ -45,6 +52,8 @@ public class FBase {
 
     public void saveToFile() {
         YamlConfiguration conf = fBaseData.get();
+        conf.set("raiding.is-protected", this.isProtected);
+        conf.set("raiding.protected-duration", this.protectedDuration);
         conf.set("base.world", this.world.getName());
         conf.set("base.chunk-x", this.center.getX());
         conf.set("base.chunk-z", this.center.getZ());
@@ -101,6 +110,16 @@ public class FBase {
         return this.spawnerChunks.size();
     }
 
+    public boolean decrementProtection() {
+        this.protectedDuration--;
+        LogUtil.info("running 1");
+        if (this.protectedDuration <= 0) {
+            LogUtil.info("running 2");
+            this.isProtected = false;
+        }
+        return this.isProtected;
+    }
+
     private List<Chunk> convertStringToChunks() {
         List<Chunk> chunks = new ArrayList<>();
         for (String entry : this.fBaseData.get().getStringList("spawner-chunks")) {
@@ -111,7 +130,25 @@ public class FBase {
         return chunks;
     }
 
+    public boolean setProtected(int duration) {
+        this.isProtected = true;
+        this.protectedDuration = duration;
+        return true;
+    }
+
     private void loadBaseClaim() {
         new BaseLoaderUtil(this.world, this.faction, this.center, this);
+    }
+
+    public boolean isProtected() {
+        return this.isProtected;
+    }
+
+    public int getProtectedDuration() {
+        return protectedDuration;
+    }
+
+    public Faction getFaction() {
+        return faction;
     }
 }

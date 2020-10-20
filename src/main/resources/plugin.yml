@@ -4,9 +4,12 @@ main: gg.steve.mc.skullwars.raids.SkullRaids
 api-version: 1.15.2
 prefix: SkullRaids
 depend: [Factions]
+softdepend: [Featherboard, MVDWPlaceholderAPI]
 authors: [stevegoodhill]
 description: Raids plugin for the SkullWars network, developed by nbdSteve.
 commands:
   sr:
     usage: /<command>
     description: Main command for SkullRaids plugin
+    aliases:
+      - raid

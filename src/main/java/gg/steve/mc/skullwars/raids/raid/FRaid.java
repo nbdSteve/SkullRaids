@@ -6,9 +6,9 @@ import com.massivecraft.factions.Factions;
 import gg.steve.mc.skullwars.raids.core.BaseClaim;
 import gg.steve.mc.skullwars.raids.core.FBase;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
+import gg.steve.mc.skullwars.raids.featherboard.FeatherboardIntegration;
 import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
 import gg.steve.mc.skullwars.raids.framework.utils.ColorUtil;
-import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -76,7 +76,7 @@ public class FRaid {
         this.origin = origin;
         this.fRaidData = new FRaidFile(raidId, defending, attacking, origin, isMainFBase);
         GeneralMessage.PHASE_1_ATTACKING.doFactionMessage(this.attacking, this.defending.getTag());
-        GeneralMessage.PHASE_1_DEFENDING.doFactionMessage(this.defending, this.attacking.getTag());
+//        GeneralMessage.PHASE_1_DEFENDING.doFactionMessage(this.defending, this.attacking.getTag());
     }
 
     public void decrementRemaining() {
@@ -85,6 +85,11 @@ public class FRaid {
             if (this.phase == FRaidPhase.COMPLETE) {
                 for (String line : Files.CONFIG.get().getStringList("complete-broadcast")) {
                     Bukkit.broadcastMessage(ColorUtil.colorize(line).replace("{attacking}", attacking.getTag()).replace("{defending}", defending.getTag()));
+                }
+                if (Files.CONFIG.get().getBoolean("raid-scoreboard.enabled")
+                        && Bukkit.getPluginManager().getPlugin("Featherboard") != null) {
+                    this.defending.getOnlinePlayers().forEach(FeatherboardIntegration::removeRaidBoard);
+                    this.attacking.getOnlinePlayers().forEach(FeatherboardIntegration::removeRaidBoard);
                 }
                 FRaidManager.removeFRaid(this.raidId);
                 this.fRaidData.delete();
@@ -108,6 +113,27 @@ public class FRaid {
             this.remaining--;
         }
         this.timeSinceLastShot++;
+    }
+
+    public void forceEnd() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            Faction faction = FPlayers.getInstance().getByPlayer(player).getFaction();
+            boolean allowed = this.defending.equals(faction);
+            if (allowed) continue;
+            if (this.isMainFBase) {
+                if (this.fBase.isChunkRegistered(player.getLocation().getChunk())) {
+                    player.teleport(this.origin.getWorld().getSpawnLocation());
+                    GeneralMessage.ANTI_LEACH.message(player);
+                }
+            } else {
+                if (this.claim.isClaimChunk(player.getLocation().getChunk())) {
+                    player.teleport(this.origin.getWorld().getSpawnLocation());
+                    GeneralMessage.ANTI_LEACH.message(player);
+                }
+            }
+        }
+        FRaidManager.removeFRaid(this.raidId);
+        this.fRaidData.delete();
     }
 
     public void reset() {

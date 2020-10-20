@@ -2,6 +2,10 @@ max-spawner-chunks: 64
 
 anti-leach-delay: 300
 
+reminder-delay: 60 # time in seconds
+
+raid-blocks-per-minute: 10
+
 phase-duration:
   1: 900
   2: 900
@@ -14,3 +18,7 @@ complete-broadcast:
   - '&5&lALERT! &b{defending} &7has survived the raid from &b{attacking}&7.'
 
 no-raid-active-placeholder: 'No raid active'
+
+raid-scoreboard:
+  enabled: true
+  board: 'raid'

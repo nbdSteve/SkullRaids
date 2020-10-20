@@ -1,6 +1,8 @@
 command:
   help: skullraids.help
   reload: skullraids.reload
+  end: skullraids.end
+  protect: skullraids.protect
 
 f-command:
   set: skullraids.fcmd.set
