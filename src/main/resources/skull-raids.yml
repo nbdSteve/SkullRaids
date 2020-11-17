@@ -14,11 +14,16 @@ phase-duration:
 phase-4-broadcast:
   - '&5&lALERT! &b{attacking} &7has just raided &b{defending}!'
 
-complete-broadcast:
+complete-unsuccess-broadcast:
+  - '&5&lALERT! &b{defending} &7has been raided by &b{attacking}&7.'
+
+complete-success-broadcast:
   - '&5&lALERT! &b{defending} &7has survived the raid from &b{attacking}&7.'
 
 no-raid-active-placeholder: 'No raid active'
 
-raid-scoreboard:
+boards:
   enabled: true
-  board: 'raid'
+  raid: 'raid'
+  defend: 'defend'
+  default: 'default'

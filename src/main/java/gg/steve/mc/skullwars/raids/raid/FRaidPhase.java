@@ -4,9 +4,9 @@ import gg.steve.mc.skullwars.raids.framework.yml.Files;
 
 public enum FRaidPhase {
     PHASE_1(1, "phase-duration.1", "phase-1-initiate"),
-    PHASE_2(2, "phase-duration.1", "phase-2-initiate"),
-    PHASE_3(3, "phase-duration.1", "phase-3-initiate"),
-    PHASE_4(4, "phase-duration.1", "phase-4-initiate"),
+    PHASE_2(2, "phase-duration.2", "phase-2-initiate"),
+    PHASE_3(3, "phase-duration.3", "phase-3-initiate"),
+    PHASE_4(4, "phase-duration.4", "phase-4-initiate"),
     COMPLETE(5, "", "");
 
     private String path;

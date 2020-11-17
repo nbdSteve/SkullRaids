@@ -25,9 +25,13 @@ public enum GeneralMessage {
     PHASE_1_DEFENDING("phase-1-defending", "{attacking}"),
     PHASE_2_ATTACKING("phase-2-attacking", "{defending}"),
     PHASE_2_DEFENDING("phase-2-defending", "{attacking}"),
-    PHASE_3_ATTACKING("phase-3-attacking", "{defending}"),
-    PHASE_3_DEFENDING("phase-3-defending", "{attacking}"),
-    // misc
+    PHASE_3_ATTACKING("phase-3-attacking", "{defending}", "{raid_duration}"),
+    PHASE_3_DEFENDING("phase-3-defending", "{attacking}", "{raid_duration}"),
+    //
+    FACTION_PROTECT("faction-protect", "{time}"),
+    RAID_PROTECT("raid-protect", "{time}"),
+    RAID_END("raid-end"),
+    // miscbro
     RELOAD("reload"),
     HELP("help");
 

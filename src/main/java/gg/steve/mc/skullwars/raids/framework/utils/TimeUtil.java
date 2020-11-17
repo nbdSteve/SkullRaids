@@ -27,6 +27,26 @@ public class TimeUtil {
         this.seconds = TimeUnit.SECONDS.toSeconds(secondsToConvert) - (TimeUnit.SECONDS.toMinutes(secondsToConvert) * 60);
     }
 
+    public String getTimeAsString() {
+        StringBuilder builder = new StringBuilder();
+        if (!getDays().equalsIgnoreCase("0")) {
+            builder.append(getDays() + "d");
+            if (!getHours().equalsIgnoreCase("0")) builder.append(" ");
+        }
+        if (!getHours().equalsIgnoreCase("0")) {
+            builder.append(getHours() + "h");
+            if (!getMinutes().equalsIgnoreCase("0")) builder.append(" ");
+        }
+        if (!getMinutes().equalsIgnoreCase("0")) {
+            builder.append(getMinutes() + "m");
+            if (!getSeconds().equalsIgnoreCase("0")) builder.append(" ");
+        }
+        if (!getSeconds().equalsIgnoreCase("0")) {
+            builder.append(getSeconds() + "s");
+        }
+        return builder.toString();
+    }
+
     /**
      * Getter for the number of days
      *

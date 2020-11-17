@@ -12,7 +12,7 @@ import java.util.List;
 public enum DebugMessage {
     // plugin
     UNCLAIM_RAID_ACTIVE("unclaim-raid-active"),
-    DISBAND_RAID_ACTIVE("disband-raid-active"),
+    DISBAND_RAID_ACTIVE("disband-raid"),
     UNCLAIM_SPAWNER_CHUNK("unclaim-spawner-chunk"),
     NO_FACTION("no-faction"),
     NOT_LEADER("not-leader"),

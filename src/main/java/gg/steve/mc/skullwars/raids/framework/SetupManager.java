@@ -4,6 +4,7 @@ import com.massivecraft.factions.FactionsPlugin;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
 import gg.steve.mc.skullwars.raids.fcmd.FSetBaseCmd;
 import gg.steve.mc.skullwars.raids.fcmd.FUnsetBaseCmd;
+import gg.steve.mc.skullwars.raids.featherboard.FeatherboardListener;
 import gg.steve.mc.skullwars.raids.fevent.ClaimListener;
 import gg.steve.mc.skullwars.raids.framework.cmd.SkullRaidsCmd;
 import gg.steve.mc.skullwars.raids.listener.PlacementListener;
@@ -57,6 +58,7 @@ public class SetupManager {
         pm.registerEvents(new TnTListener(), instance);
         pm.registerEvents(new WallListener(), instance);
         pm.registerEvents(new PlacementListener(), instance);
+        pm.registerEvents(new FeatherboardListener(), instance);
     }
 
     public static void registerEvent(JavaPlugin instance, Listener listener) {

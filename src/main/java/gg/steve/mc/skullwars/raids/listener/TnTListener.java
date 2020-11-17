@@ -9,6 +9,8 @@ import gg.steve.mc.skullwars.raids.featherboard.FeatherboardIntegration;
 import gg.steve.mc.skullwars.raids.framework.SetupManager;
 import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
 import gg.steve.mc.skullwars.raids.framework.utils.ColorUtil;
+import gg.steve.mc.skullwars.raids.framework.utils.LogUtil;
+import gg.steve.mc.skullwars.raids.framework.utils.TimeUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import gg.steve.mc.skullwars.raids.raid.FRaid;
 import gg.steve.mc.skullwars.raids.raid.FRaidManager;
@@ -65,11 +67,13 @@ public class TnTListener implements Listener {
         if (event.getEntityType() != EntityType.PRIMED_TNT) return;
         Faction defending = Board.getInstance().getFactionAt(new FLocation(event.getEntity().getLocation()));
         if (defending.isWilderness() || defending.isWarZone() || defending.isSafeZone()) return;
+        Faction attacking = factionTnT.get(event.getEntity().getUniqueId());
         if (FBaseManager.isProtected(defending)) {
+            TimeUtil time = new TimeUtil(FBaseManager.getFBase(defending).getProtectedDuration());
+            GeneralMessage.RAID_PROTECT.doFactionMessage(attacking, time.getTimeAsString());
             event.setCancelled(true);
             return;
         }
-        Faction attacking = factionTnT.get(event.getEntity().getUniqueId());
         factionTnT.remove(event.getEntity().getUniqueId());
         if (attacking.equals(defending)) return;
         if (FRaidManager.isRaidActive(defending)) {
@@ -95,14 +99,13 @@ public class TnTListener implements Listener {
             }
         } else {
             FRaidManager.addFRaid(defending, attacking, event.getLocation().getChunk());
-            if (Files.CONFIG.get().getBoolean("raid-scoreboard.enabled") && Bukkit.getPluginManager().getPlugin("Featherboard") != null) {
+            if (Files.CONFIG.get().getBoolean("boards.enabled") && Bukkit.getPluginManager().getPlugin("FeatherBoard") != null) {
                 attacking.getOnlinePlayers().forEach(FeatherboardIntegration::showRaidBoard);
-                defending.getOnlinePlayers().forEach(FeatherboardIntegration::showRaidBoard);
             }
             Bukkit.getScheduler().scheduleSyncDelayedTask(SkullRaids.getInstance(), () -> {
                 SetupManager.shutdownPluginCache();
                 SetupManager.loadPluginCache();
-            }, 2L);
+            }, 10L);
         }
     }
 }

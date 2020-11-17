@@ -77,3 +77,18 @@ max-placed:
   action-bar: true
   text:
     - '&5&lSkullRaids&d| &7You can only place 10 blocks per minute whilst you are being raided.'
+
+faction-protect:
+  action-bar: true
+  text:
+    - '&5&lSkullRaids&d| &7Your faction has been protected by an admin for &e{time}&7.'
+
+raid-protect:
+  action-bar: true
+  text:
+    - '&5&lSkullRaids&d| &7That faction is protected! protection ends in &e{time}&7.'
+
+raid-end:
+  action-bar: true
+  text:
+    - '&5&lSkullRaids&d| &7An admin has forcefully ended the current raid&7.'

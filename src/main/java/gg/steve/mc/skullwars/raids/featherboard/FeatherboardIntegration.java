@@ -7,10 +7,14 @@ import org.bukkit.entity.Player;
 public class FeatherboardIntegration {
 
     public static void showRaidBoard(Player player) {
-        FeatherBoardAPI.showScoreboard(player, Files.CONFIG.get().getString("raid-scoreboard.board"));
+        FeatherBoardAPI.showScoreboard(player, Files.CONFIG.get().getString("boards.raid"), true);
     }
 
-    public static void removeRaidBoard(Player player) {
-        FeatherBoardAPI.resetDefaultScoreboard(player);
+    public static void showDefendBoard(Player player) {
+        FeatherBoardAPI.showScoreboard(player, Files.CONFIG.get().getString("boards.defend"), true);
+    }
+
+    public static void removeRaidBoards(Player player) {
+        FeatherBoardAPI.showScoreboard(player, Files.CONFIG.get().getString("boards.default"), true);
     }
 }

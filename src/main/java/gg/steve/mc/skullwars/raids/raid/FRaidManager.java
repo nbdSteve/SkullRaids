@@ -4,8 +4,11 @@ import com.massivecraft.factions.Faction;
 import gg.steve.mc.skullwars.raids.SkullRaids;
 import gg.steve.mc.skullwars.raids.core.FBase;
 import gg.steve.mc.skullwars.raids.core.FBaseManager;
+import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
+import gg.steve.mc.skullwars.raids.framework.utils.TimeUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.File;
 import java.util.*;
@@ -13,6 +16,7 @@ import java.util.*;
 public class FRaidManager {
     private static Map<UUID, FRaid> activeRaids;
     private static List<Faction> protectedFactions;
+    private static BukkitTask task;
 
     public static void loadRaids() {
         activeRaids = new HashMap<>();
@@ -24,28 +28,26 @@ public class FRaidManager {
             activeRaids.put(raidId, new FRaid(raidId));
         }
         protectedFactions.addAll(FBaseManager.getProtectedFactions());
-        Bukkit.getScheduler().runTaskTimerAsynchronously(SkullRaids.getInstance(), () -> {
+        task = Bukkit.getScheduler().runTaskTimerAsynchronously(SkullRaids.getInstance(), () -> {
             if (activeRaids.isEmpty() && protectedFactions.isEmpty()) return;
             List<Faction> removed = new ArrayList<>();
             for (Faction faction : protectedFactions) {
                 FBase base = FBaseManager.getFBase(faction);
                 if (!base.decrementProtection()) removed.add(faction);
             }
-            for (Faction faction : removed) {
-                protectedFactions.remove(faction);
-            }
-            for (FRaid raid : activeRaids.values()) {
-                raid.decrementRemaining();
+            protectedFactions.removeAll(removed);
+            try {
+                activeRaids.values().forEach(FRaid::decrementRemaining);
+            } catch (ConcurrentModificationException e) {
             }
         }, 0L, 20L);
     }
 
     public static void shutdownRaidCache() {
         if (activeRaids == null || activeRaids.isEmpty()) return;
-        for (FRaid raid : activeRaids.values()) {
-            raid.saveToFile();
-        }
+        activeRaids.values().forEach(FRaid::saveToFile);
         activeRaids.clear();
+        if (task != null) task.cancel();
     }
 
     public static boolean addFRaid(Faction defending, Faction attacking, Chunk origin) {
@@ -127,6 +129,11 @@ public class FRaidManager {
 
     public static boolean setProtected(Faction faction, int duration) {
         if (!FBaseManager.isFBaseSet(faction)) return false;
+        if (FRaidManager.isRaidActive(faction)) {
+            FRaid raid = FRaidManager.getFRaid(faction);
+            TimeUtil time = new TimeUtil(duration);
+            GeneralMessage.RAID_PROTECT.doFactionMessage(raid.getAttacking(), time.getTimeAsString());
+        }
         endFRaid(faction);
         protectedFactions.add(faction);
         return FBaseManager.setProtected(faction, duration);

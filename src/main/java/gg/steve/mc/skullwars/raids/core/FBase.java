@@ -112,9 +112,7 @@ public class FBase {
 
     public boolean decrementProtection() {
         this.protectedDuration--;
-        LogUtil.info("running 1");
         if (this.protectedDuration <= 0) {
-            LogUtil.info("running 2");
             this.isProtected = false;
         }
         return this.isProtected;

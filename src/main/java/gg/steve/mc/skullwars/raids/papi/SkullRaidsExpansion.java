@@ -49,23 +49,8 @@ public class SkullRaidsExpansion extends PlaceholderExpansion {
             return Files.CONFIG.get().getString("no-raid-active-placeholder");
         FRaid fRaid = FRaidManager.getFRaid(fPlayer.getFaction());
         if (identifier.equalsIgnoreCase("last_shot")) {
-            TimeUtil time = new TimeUtil(fRaid.getTimeSinceLastShot());
-            StringBuilder builder = new StringBuilder();
-            if (!time.getHours().equalsIgnoreCase("0")) {
-//                return time.getHours();
-                builder.append(time.getHours() + "h");
-            }
-            if (!time.getMinutes().equalsIgnoreCase("0")) {
-//                return time.getMinutes();
-                if (!time.getHours().equalsIgnoreCase("0")) builder.append(" ");
-                builder.append(time.getMinutes() + "m");
-            }
-            if (!time.getSeconds().equalsIgnoreCase("0")) {
-//                return time.getSeconds();
-                if (!time.getMinutes().equalsIgnoreCase("0") || !time.getHours().equalsIgnoreCase("0")) builder.append(" ");
-                builder.append(time.getSeconds() + "s ");
-            }
-            return builder.toString();
+            TimeUtil time = new TimeUtil(fRaid.getRemaining());
+            return time.getTimeAsString();
         }
         if (identifier.equalsIgnoreCase("target")) return fRaid.getDefending().getTag();
         if (identifier.equalsIgnoreCase("faction")) return fRaid.getAttacking().getTag();

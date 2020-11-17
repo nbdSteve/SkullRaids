@@ -4,6 +4,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import gg.steve.mc.skullwars.raids.framework.cmd.SubCommand;
 import gg.steve.mc.skullwars.raids.framework.permission.PermissionNode;
+import gg.steve.mc.skullwars.raids.framework.utils.TimeUtil;
 import gg.steve.mc.skullwars.raids.raid.FRaidManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -35,7 +36,8 @@ public class ProtectSubCmd extends SubCommand {
         if (!FRaidManager.setProtected(faction, duration)) {
             sender.sendMessage(ChatColor.RED + "That faction cannot be protected until they have set and fbase.");
         } else {
-            sender.sendMessage(ChatColor.GREEN + "That faction is now protected from raiding for " + duration + " seconds.");
+            TimeUtil time = new TimeUtil(duration);
+            sender.sendMessage(ChatColor.GREEN + "That faction is now protected from raiding for " + time.getTimeAsString() + ".");
         }
     }
 }

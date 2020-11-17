@@ -4,6 +4,7 @@ import com.massivecraft.factions.Faction;
 import com.massivecraft.factions.Factions;
 import gg.steve.mc.skullwars.raids.SkullRaids;
 import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
+import gg.steve.mc.skullwars.raids.framework.utils.TimeUtil;
 import gg.steve.mc.skullwars.raids.framework.yml.Files;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -34,6 +35,7 @@ public class FBaseManager {
                 counter = 0;
             } else return;
             for (Faction faction : Factions.getInstance().getAllFactions()) {
+                if (faction.isWilderness() || faction.isSafeZone() || faction.isWarZone()) continue;
                 if (!fBases.containsKey(faction)) GeneralMessage.FBASE_REMINDER.doFactionMessage(faction);
             }
         }, 0L, 20L);
@@ -92,6 +94,7 @@ public class FBaseManager {
 
     public static boolean setProtected(Faction faction, int duration) {
         if (!fBases.containsKey(faction)) return false;
+        GeneralMessage.FACTION_PROTECT.doFactionMessage(faction, new TimeUtil(duration).getTimeAsString());
         return fBases.get(faction).setProtected(duration);
     }
 }

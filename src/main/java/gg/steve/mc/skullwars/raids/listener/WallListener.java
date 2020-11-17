@@ -5,6 +5,7 @@ import com.massivecraft.factions.FLocation;
 import com.massivecraft.factions.FPlayers;
 import com.massivecraft.factions.Faction;
 import gg.steve.mc.skullwars.raids.framework.message.GeneralMessage;
+import gg.steve.mc.skullwars.raids.raid.FRaid;
 import gg.steve.mc.skullwars.raids.raid.FRaidManager;
 import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
@@ -24,6 +25,8 @@ public class WallListener implements Listener {
         if (FRaidManager.isRaidActive(defending)
                 && !FRaidManager.isAttacking(attacking, defending, chunk)
                 && FRaidManager.getFRaid(defending, chunk).isAntiLeach()) {
+            FRaid raid = FRaidManager.getFRaid(defending, chunk);
+            if (raid != null && raid.isLeachPlayer(event.getPlayer())) return;
             GeneralMessage.ANTI_LEACH_WALL.message(event.getPlayer(), defending.getTag());
             event.setCancelled(true);
         }

@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class FRaidFile extends PluginFile {
@@ -58,6 +59,7 @@ public class FRaidFile extends PluginFile {
         config.set("isAntiLeach", false);
         config.set("isMainFBase", isMainFBase);
         config.set("isRaided", false);
+        config.set("players-pending-leach-teleport", new ArrayList<>());
         save();
     }
 
